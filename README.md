@@ -16,7 +16,7 @@
 - Import customers from a 3rd party data provider (https://randomuser.me) and save to database.
 - Display a list of customers from the database.
 - Select and display details of a single customer from the database.
-- Use Lumen or Syhamfony to write the following backend services in a single project.
+- Use Lumen or Symfony to write the following backend services in a single project.
 - Store the customers in an SQL Type database and in `customers` table.
 - Importer service should be constructed in a way that it can be used in any part of the Application or services or 
 controllers such as API controllers, command, jobs and more.
@@ -90,17 +90,10 @@ php artisan customer:import --count=[How many users to import, default: 100]
 ```
 
 ### Unit Test
-You can skip the [Installation](#installation) part __BUT__ you need to run `php artisan doctrine:schema:create` on what
-database or `env('DB_CONNECTION')` you are using the run:
+Simple, run:
 
 ```sh 
 vendor/bin/phpunit
-```
-
-In case, you wanted to use `sqlite` for testing you can run:
-
-```sh
-DB_CONNECTION=sqlite vendor/bin/phpunit
 ```
 
 ### Docker
