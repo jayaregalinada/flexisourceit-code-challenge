@@ -1,0 +1,5 @@
+/vendor
+/storage
+/bootstrap/cache
+/.idea
+/.github
