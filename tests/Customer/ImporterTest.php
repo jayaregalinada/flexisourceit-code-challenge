@@ -18,6 +18,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Services\Customer\Contracts\ToImportContract;
+use Services\Customer\Models\Import\CustomerImport;
 use Services\Customer\Models\RandomUser\RandomUserModel;
 
 class ImporterTest extends TestCase
@@ -104,6 +105,50 @@ class ImporterTest extends TestCase
         };
 
         $importer->import($importerClass);
+
+        $this->seeInDatabase('customers', [
+            'email' => 'email@example.com',
+            'first_name' => 'John',
+            'last_name' => 'McClane',
+        ]);
+    }
+
+    public function testFirstPartyImporterClass()
+    {
+        entity(Customer::class, 10)->create();
+        entity(Customer::class)->create([
+            'email' => 'email@example.com',
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+        ]);
+        $manager = Mockery::mock(Manager::class);
+        $manager->shouldReceive('results')->andReturn(new Collection([
+            new RandomUserModel([
+                'email' => 'email@example.com',
+                'name' => [
+                    'first' => 'John',
+                    'last' => 'McClane'
+                ],
+                'location' => [
+                    'country' => 'Country',
+                    'city' => 'City',
+                ],
+                'login' => [
+                    'username' => 'username',
+                    'md5' => md5('password')
+                ],
+                'phone' => '(02) 222-2222',
+            ])
+        ]));
+        $dispatcher = Mockery::mock(Dispatcher::class);
+        $dispatcher->shouldReceive('dispatch')->andReturnNull();
+
+        $importer = new Importer(
+            $manager,
+            $this->app->make(EntityManagerInterface::class),
+            $dispatcher,
+        );
+        $importer->import(new CustomerImport());
 
         $this->seeInDatabase('customers', [
             'email' => 'email@example.com',

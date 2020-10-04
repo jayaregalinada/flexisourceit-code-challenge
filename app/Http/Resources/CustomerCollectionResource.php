@@ -3,21 +3,20 @@
 namespace App\Http\Resources;
 
 use App\Entities\Customer;
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class CustomerCollectionResource extends ResourceCollection
+/**
+ * @mixin Customer
+ */
+class CustomerCollectionResource extends JsonResource
 {
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->map(function (Customer $customer) {
-                return [
-                    'id' => (int) $customer->getId(),
-                    'full_name' => $customer->getFullName(),
-                    'email' => $customer->getEmail(),
-                    'country' => $customer->getCountry(),
-                ];
-            }),
+            'id' => (int) $this->getId(),
+            'full_name' => $this->getFullName(),
+            'email' => $this->getEmail(),
+            'country' => $this->getCountry(),
         ];
     }
 }

@@ -6,6 +6,7 @@ use Closure;
 use App\Entities\Customer;
 use Illuminate\Support\Arr;
 use Doctrine\ORM\EntityManagerInterface;
+use Services\Customer\Exceptions\CustomerNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CustomerBindingMiddleware
@@ -49,6 +50,6 @@ class CustomerBindingMiddleware
             return $find;
         }
 
-        throw new NotFoundHttpException(__('customer::customer.not_found'));
+        throw new CustomerNotFoundException($id);
     }
 }

@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Services\Customer\Enums\GenderEnum;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="\App\Repositories\CustomerRepository")
  * @ORM\Table(name="customers")
  */
 class Customer extends AbstractCustomer
